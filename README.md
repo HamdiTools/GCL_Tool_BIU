@@ -15,4 +15,5 @@ A) Using Python Console, run the program with the following arguments:
 young.csv,old.csv 100 default bootstrap
 <br />
 B) using jupiter notebook:
-<br />There are two examples in the file - the first for two files bootsrtap and the latter foor a single regular_gcl calculation
+<br />There are two examples in the file - the first for two files bootsrtap and the latter foor a single regular_gcl calculation.
+<br />It is easier here to play with the arguments and get resaults according to the input you insert.
