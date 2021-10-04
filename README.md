@@ -1,6 +1,10 @@
 # GCL_Tool_BIU
 Calculate the GCL of the input data with bootstrap
 
+# SetUp:
+1) download all the files from this github reposatory to a floder on your computer.
+2) make sure you have python 3.9 installed.
+
 # How To:
 A) Using Python Console, run the program with the following arguments:
 <br />[1] mandatory: a list of csv files with commas between each file.
