@@ -11,7 +11,6 @@ gcl_output - The GCL of the data
 '''
 
 # Imports:
-
 import numpy as np
 import matplotlib.pyplot as plt
 import math
@@ -20,7 +19,7 @@ import random
 import sys
 # alternative for 'pdist2' in matlab (euclidean distance):
 from scipy.spatial.distance import cdist
-# check if file exists:
+# check if input file/s exists:
 from pathlib import Path
 from os import path
 
@@ -108,13 +107,13 @@ def bootstrap(data, boot_straps, choose_percentage):
     return boot_strap_arr
 
 
-def main_gcl_start(files_arr, num_divisions=100, boot_strap_percentage=0.5, task='bootStrap'):
+def main_gcl_start(files_arr, num_divisions=100, boot_strap_percentage=0.5, task='bootstrap'):
     '''
     The main gcl start function to generate and present the histograms.
     :param files_arr: Array of .CSV files.
     :param num_divisions: Number of random gene division for calculation.
     :param boot_strap_percentage: Percentage of cells to choose for bootstrapping.
-    :param task: String, either 'bootsrtap' or 'regular_GCL' for the requested task.
+    :param task: String, either 'bootsrtap' or 'regular_calc' for the requested task.
     :return: none.
     '''
     for file in files_arr:
@@ -124,14 +123,17 @@ def main_gcl_start(files_arr, num_divisions=100, boot_strap_percentage=0.5, task
     for file in files_arr:
         csv_mat = np.genfromtxt(file, delimiter=',')
         file_names.append(Path(file).stem)
-        if task == 'bootStrap':
+        if task == 'bootstrap':
             result_arr.append(bootstrap(csv_mat, num_divisions, boot_strap_percentage))
-        elif task == 'regular_GCL':
+        elif task == 'regular_calc':
             result_arr.append(gcl_calculator(csv_mat, num_divisions))
         else:
             raise NameError('Invalid Task!')
     for result in range(len(result_arr)):
         plt.hist(result_arr[result], 8, density=False, edgecolor='black', label=file_names[result], alpha=.8)
+    plot_title = 'GCL - ' + ('BootStrap ' if task == 'bootstrap' else 'Regular Calculation ') + 'Histogram with ' + str(
+        num_divisions) + ' iterations' + (', ' + str(boot_strap_percentage) + '%' if task == 'bootstrap' else '')
+    plt.title(plot_title)
     plt.legend()
     plt.show()
 
@@ -143,7 +145,7 @@ if __name__ == '__main__':
     *       1) data_arr [mandatory] - files array data with all the files in the current folder to make the GCL on.
     *       2) num_division [optional] - Number of random gene division/ bootsrtap iterations for calculation.
     *       3) bootstrap_percentage [optional] - Percentage of cells to choose for bootstrapping.
-    *       4) task_option [optional] - either 'bootsrtap' or 'regular_GCL' for the requested task.
+    *       4) task_option [optional] - either 'bootsrtap' or 'regular_calc' for the requested task.
     '''
     data_arr = sys.argv[1].split(',')
     num_division = 100
@@ -152,7 +154,7 @@ if __name__ == '__main__':
     bootstrap_percentage = 0.8
     if len(sys.argv) > 3:
         bootstrap_percentage = 0.8 if sys.argv[3] == 'default' else float(sys.argv[3])
-    task_option = 'bootStrap'
+    task_option = 'bootstrap'
     if len(sys.argv) > 4:
-        task_option = 'bootStrap' if sys.argv[4] == 'default' else sys.argv[4]
+        task_option = 'bootstrap' if sys.argv[4] == 'default' else sys.argv[4]
     main_gcl_start(data_arr, num_division, bootstrap_percentage, task_option)
