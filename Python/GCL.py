@@ -65,7 +65,7 @@ def get_matrix(genes_from_data, cells):
     return Aij
 
 
-def gcl_single_calculation(data):
+def bcdcorr_calculation(data):
     """
     split the data randomly to two equal parts, get their matrices and return their GCL.
     :param data: Input data.
@@ -79,20 +79,20 @@ def gcl_single_calculation(data):
     return rn(Aij2, Aij1, cells)
 
 
-def gcl_calculator(data, num_divisions):
+def gcl(data, num_divisions):
     """
     calculate the GCL of the data (num_divisions) times and return it as a list (vector).
     :param data: Input data such that [num_genes, num_cells] = size(data).
     :param num_divisions: Number of random gene division to calculate.
-    :return: The GCL of the data.
+    :return: The GCL of the data - a number (nan mean value).
     """
     gcl_output = []
     for i in range(num_divisions):
-        gcl_output.append(gcl_single_calculation(data))
-    return gcl_output
+        gcl_output.append(bcdcorr_calculation(data))
+    return np.nanmean(gcl_output)
 
 
-def bootstrap(data, boot_straps, choose_percentage):
+def bootstrap(data, boot_straps, num_divisions, choose_percentage):
     """
     bootstrapping the data - instead of repeating values, unique choose_percentage values from the data.
     :param data: Input data.
@@ -103,7 +103,7 @@ def bootstrap(data, boot_straps, choose_percentage):
     boot_strap_arr = []
     for i in range(boot_straps):
         delete_arr = random.sample(range(0, len(data[0])), round(len(data[0]) * (1 - choose_percentage)))
-        boot_strap_arr.append(gcl_single_calculation(np.delete(data, delete_arr, 1)))
+        boot_strap_arr.append(gcl(np.delete(data, delete_arr, 1), num_divisions))
     return boot_strap_arr
 
 
@@ -126,14 +126,17 @@ def main_gcl_start(files_arr, num_divisions=100, boot_strap_percentage=0.5, task
         if task == 'bootstrap':
             result_arr.append(bootstrap(csv_mat, num_divisions, boot_strap_percentage))
         elif task == 'regular_calc':
-            result_arr.append(gcl_calculator(csv_mat, num_divisions))
+            result_arr.append(gcl(csv_mat, num_divisions))
         else:
             raise NameError('Invalid Task!')
+    # plotting the histogram:
     for result in range(len(result_arr)):
         plt.hist(result_arr[result], 8, density=False, edgecolor='black', label=file_names[result], alpha=.8)
     plot_title = 'GCL - ' + ('BootStrap ' if task == 'bootstrap' else 'Regular Calculation ') + 'Histogram with ' + str(
-        num_divisions) + ' iterations' + (', ' + str(boot_strap_percentage) + '%' if task == 'bootstrap' else '')
+        num_divisions) + ' iterations' + (', ' + str(boot_strap_percentage * 100) + '%' if task == 'bootstrap' else '')
     plt.title(plot_title)
+    plt.xlabel('GCL')
+    plt.ylabel('Iterations')
     plt.legend()
     plt.show()
 
