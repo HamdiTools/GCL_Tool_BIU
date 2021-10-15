@@ -1,3 +1,14 @@
+'''
+Calculate the GCL of the input data with bootstrap
+Guy Amit, guy1.amit@gmail.com, Orr Levy, Dana Vaknin, Tom Snir, Sol
+Efroni, Peter Castaldi, Yang-Yu Liu, Haim Cohen, Amir Bashan.
+Based on Bias Corrected Distance Correlation Szekely, G. J., & Rizzo,
+M. L. (2013). The distance correlation t-test of independence in
+high dimension. Journal of Multivariate Analysis, 117, 193-213.
+data - Input data such that [num_genes, num_cells] = size(data)
+num_division - Number of random gene division for calculation.
+gcl_output - The GCL of the data
+'''
 # Imports:
 import numpy as np
 import math
@@ -81,7 +92,7 @@ def bootstrap(data, boot_straps=100, num_divisions=100, choose_percentage=0.8):
     :param boot_straps: Number of iterations to calculate (default: 100).
     :param num_divisions: Number of divisions for the gcl calculation (default: 100).
     :param choose_percentage: The percentage of the cells to calculate in each iteration (default: 0.8).
-    :return:
+    :return: an array (vector) of all the gcl's values of the bootstraps.
     """
     boot_strap_arr = []
     for i in range(boot_straps):

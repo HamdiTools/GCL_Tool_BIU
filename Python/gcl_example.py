@@ -1,24 +1,13 @@
-'''
-Calculate the GCL of the input data with bootstrap
-Guy Amit, guy1.amit@gmail.com, Orr Levy, Dana Vaknin, Tom Snir, Sol
-Efroni, Peter Castaldi, Yang-Yu Liu, Haim Cohen, Amir Bashan.
-Based on Bias Corrected Distance Correlation Szekely, G. J., & Rizzo,
-M. L. (2013). The distance correlation t-test of independence in
-high dimension. Journal of Multivariate Analysis, 117, 193-213.
-data - Input data such that [num_genes, num_cells] = size(data)
-num_division - Number of random gene division for calculation.
-gcl_output - The GCL of the data
-'''
-import sys
+# Imports:
+import gcl_library as gcl_lib
 
+import sys
 import numpy as np
 # check if input file/s exists:
 from pathlib import Path
 from os import path
 # gcl library import:
 from matplotlib import pyplot as plt
-
-import gcl_library as gcl_lib
 
 
 def main_gcl_start(files_arr, boot_straps=100, num_divisions=100, boot_strap_percentage=0.5, task='bootstrap'):
@@ -42,18 +31,22 @@ def main_gcl_start(files_arr, boot_straps=100, num_divisions=100, boot_strap_per
             result_arr.append(gcl_lib.bootstrap(csv_mat, boot_straps, num_divisions, boot_strap_percentage))
         elif task == 'regular_calc':
             result_arr.append(gcl_lib.gcl(csv_mat, num_divisions))
+            print('GCL value of ' + file_names[-1] + ' is: ' + str(result_arr[-1]))
         else:
             raise NameError('Invalid Task!')
     # plotting the histogram:
-    for result in range(len(result_arr)):
-        plt.hist(result_arr[result], 8, density=False, edgecolor='black', label=file_names[result], alpha=.8)
-    plot_title = 'GCL - ' + ('BootStrap ' if task == 'bootstrap' else 'Regular Calculation ') + 'Histogram with ' + str(
-        num_divisions) + ' iterations' + (', ' + str(boot_strap_percentage * 100) + '%' if task == 'bootstrap' else '')
-    plt.title(plot_title)
-    plt.xlabel('GCL')
-    plt.ylabel('Iterations')
-    plt.legend()
-    plt.show()
+    if task == 'bootstrap':
+        for result in range(len(result_arr)):
+            plt.hist(result_arr[result], 8, density=False, edgecolor='black', label=file_names[result], alpha=.8)
+        plot_title = 'GCL - ' + (
+            'BootStrap ' if task == 'bootstrap' else 'Regular Calculation ') + 'Histogram with: ' + str(
+            num_divisions) + ' iterations' + (', ' + str(boot_straps) + ' Boot Straps' + ', ' + str(
+            boot_strap_percentage * 100) + '%' if task == 'bootstrap' else '')
+        plt.title(plot_title)
+        plt.xlabel('GCL')
+        plt.ylabel('Iterations')
+        plt.legend()
+        plt.show()
 
 
 if __name__ == '__main__':
@@ -61,17 +54,17 @@ if __name__ == '__main__':
     run main_gcl_start with received arguments or default values.
     *Input: (as arguments, in the following order. for default write: 'default')
     *       1) data_arr [mandatory] - files array data with all the files in the current folder to make the GCL on.
-    *       2) num_division [optional] - Number of random gene division/ bootsrtap iterations for calculation.
-    *       3)
+    *       2) num_division [optional] - Number of random gene division iterations for calculation.
+    *       3) bootsrtaps [optional] - Number of boot straps iterations for calculation.
     *       4) bootstrap_percentage [optional] - Percentage of cells to choose for bootstrapping.
     *       5) task_option [optional] - either 'bootsrtap' or 'regular_calc' for the requested task.
     '''
-    if len(sys.argv) ==1:
+    if len(sys.argv) == 1:
         raise Exception("not enough arguments")
     data_arr = sys.argv[1].split(',')
     num_division = 100
     if len(sys.argv) > 2:
-        num_division = 100 if sys.argv[2] == 'default' else int(sys.argv[2])
+        num_division = 50 if sys.argv[2] == 'default' else int(sys.argv[2])
     boot_strap = 100
     if len(sys.argv) > 3:
         boot_strap = 100 if sys.argv[3] == 'default' else int(sys.argv[3])
@@ -81,5 +74,4 @@ if __name__ == '__main__':
     task_option = 'bootstrap'
     if len(sys.argv) > 5:
         task_option = 'bootstrap' if sys.argv[5] == 'default' else sys.argv[5]
-
     main_gcl_start(data_arr, boot_strap, num_division, bootstrap_percentage, task_option)
