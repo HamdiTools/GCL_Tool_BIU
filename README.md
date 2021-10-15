@@ -18,9 +18,8 @@ For bootsrtap process: num_divisions=70 and bootsrtraps =70 on the two given fil
 download all the files from this github reposatory to a floder on your computer.<br />
 A) Using Python Console, run the program with the following arguments:
 1) data_arr [mandatory] - files array data with all the files in the current folder to make the GCL on.
-2) num_division [optional] - Number of random gene division iterations for calculation.
-3) bootsrtaps [optional] - Number of boot straps iterations for calculation.
-4) bootstrap_percentage [optional] - Percentage of cells to choose for bootstrapping.
-5) task_option [optional] - either 'bootsrtap' or 'regular_calc' for the requested task.
-* for default values - enter defuault instead of the requested value, an input for example:<br />
-young.csv,old.csv 50 100 default bootstrap
+2) num_division [optional - default:100] - Number of random gene division iterations for calculation.
+3) bootsrtaps [optional - default:100] - Number of boot straps iterations for calculation.
+4) bootstrap_percentage [optional - default:0.8] - Percentage of cells to choose for bootstrapping, a number between 0 and 1.
+5) task_option [optional -default:'bootsrtap'] - either 'bootsrtap' or 'regular_calc' for the requested task.
+* for default values - enter 'defuault' instead of the requested value.<br />An input for example: young.csv,old.csv 50 100 default bootstrap
