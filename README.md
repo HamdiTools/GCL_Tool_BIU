@@ -1,10 +1,6 @@
 # GCL_Tool_BIU
 Calculate the GCL of the input data with bootstrap
 
-# SetUp:
-1) download all the files from this github reposatory to a floder on your computer.
-2) make sure you have .9 installed.
-
 # Requirements:
 1) python 3
 2) Packages for python (if you don't have one of the following, right click inside python on the missing import -> Show Context Actions -> Install Package):<br /> numpy, math, random, scipy.
@@ -19,6 +15,7 @@ For bootsrtap process: num_divisions=70 and bootsrtraps =70 on the two given fil
 <br />For regular gcl value: num_divisions=100 on the two given files in this reposetory:around 20 seconds.
 
 # How To run the example file :
+download all the files from this github reposatory to a floder on your computer.<br />
 A) Using Python Console, run the program with the following arguments:
 1) data_arr [mandatory] - files array data with all the files in the current folder to make the GCL on.
 2) num_division [optional] - Number of random gene division iterations for calculation.
