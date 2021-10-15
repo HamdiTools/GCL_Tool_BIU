@@ -5,7 +5,7 @@ Calculate the GCL of the input data with bootstrap
 1) python 3
 2) Packages for python (if you don't have one of the following, right click inside python on the missing import -> Show Context Actions -> Install Package):<br /> numpy, math, random, scipy.
 
-# How to include in your own python project:
+# How to include the tool in your own python project:
 1) put the gcl_library.py file insied your python project.
 2) add the import: import gcl_library as gcl_lib
 3) for example adding a bootsratp command to get a vector, simply write: gcl_lib.bootstrap(the required arguments)
