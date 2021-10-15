@@ -1,23 +1,26 @@
 # GCL_Tool_BIU
 Calculate the GCL of the input data with bootstrap
 
-# SetUp:
-1) download all the files from this github reposatory to a floder on your computer.
-2) make sure you have .9 installed.
-
 # Requirements:
 1) python 3
-2) Packages for python (if you don't have one of the following, right click inside python on the missing import -> Show Context Actions -> Install Package): numpy, math, random, scipy.
+2) Packages for python (if you don't have one of the following, right click inside python on the missing import -> Show Context Actions -> Install Package):<br /> numpy, math, random, scipy.
 
-# How To:
+# How to include in your own python project:
+1) put the gcl_library.py file insied your python project.
+2) add the import: import gcl_library as gcl_lib
+3) for example adding a bootsratp command to get a vector, simply write: gcl_lib.bootstrap(the required arguments)
+
+# Usual running time:
+For bootsrtap process: num_divisions=50 and bootsrtraps =100 on the two given files in this reposetory: around 8 minutes.
+<br />For bootsrtap process: num_divisions=70 and bootsrtraps =70 on the two given files in this reposetory: around 9 minutes.
+<br />For regular gcl value: num_divisions=100 on the two given files in this reposetory:around 20 seconds.
+
+# How To run the example file :
+download all the files from this github reposatory to a floder on your computer.<br />
 A) Using Python Console, run the program with the following arguments:
-<br />[1] mandatory: a list of csv files with commas between each file.
-<br />[2] optional: number of random gene division/ bootsrtap iterations for calculation. (default will be 100)
-<br />[3] optional: percentage of cells to choose for bootstrapping. (default will be 0.8).
-<br />[4] optional: either 'bootsrtap' or 'regular_calc' for the requested task. (default will be 'bootsrtap').
-* for default values - enter defuault instead of the requested value, an input for example:
-young.csv,old.csv 100 default bootstrap
-<br />
-B) Using Jupiter Notebook:
-<br />There are two examples in the file - the first for two files bootsrtap and the latter foor a single regular_calc calculation.
-<br />It is easier here to play with the arguments and get resaults according to the input you insert.
+1) data_arr [mandatory] - files array data with all the files in the current folder to make the GCL on.
+2) num_division [optional - default:50] - Number of random gene division iterations for calculation.
+3) bootsrtaps [optional - default:100] - Number of boot straps iterations for calculation.
+4) bootstrap_percentage [optional - default:0.8] - Percentage of cells to choose for bootstrapping, a number between 0 and 1.
+5) task_option [optional -default:'bootsrtap'] - either 'bootsrtap' or 'regular_calc' for the requested task.
+* for default values - enter 'defuault' instead of the requested value.<br />An input for example: young.csv,old.csv 50 100 default bootstrap
