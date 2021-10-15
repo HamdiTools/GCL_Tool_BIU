@@ -66,7 +66,8 @@ if __name__ == '__main__':
     *       4) bootstrap_percentage [optional] - Percentage of cells to choose for bootstrapping.
     *       5) task_option [optional] - either 'bootsrtap' or 'regular_calc' for the requested task.
     '''
-
+    if len(sys.argv) ==1:
+        raise Exception("not enough arguments")
     data_arr = sys.argv[1].split(',')
     num_division = 100
     if len(sys.argv) > 2:
