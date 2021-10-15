@@ -15,8 +15,8 @@ Calculate the GCL of the input data with bootstrap
 3) for example adding a bootsratp command to get a vector, simply write: gcl_lib.bootstrap(the required arguments)
 
 # Usual running time:
-for bootsrtap process: num_divisions=70 and bootsrtraps =70 on the two given files in this reposetory: around 9 minutes.
-for regular gcl value: num_divisions=100 on the two given files in this reposetory: 20 seconds.
+For bootsrtap process: num_divisions=70 and bootsrtraps =70 on the two given files in this reposetory: around 9 minutes.
+<br />For regular gcl value: num_divisions=100 on the two given files in this reposetory: 20 seconds.
 
 # How To run the example file :
 A) Using Python Console, run the program with the following arguments:
