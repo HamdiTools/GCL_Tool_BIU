@@ -16,7 +16,7 @@ Calculate the GCL of the input data with bootstrap
 
 # Usual running time:
 For bootsrtap process: num_divisions=70 and bootsrtraps =70 on the two given files in this reposetory: around 9 minutes.
-<br />For regular gcl value: num_divisions=100 on the two given files in this reposetory: 20 seconds.
+<br />For regular gcl value: num_divisions=100 on the two given files in this reposetory:around 20 seconds.
 
 # How To run the example file :
 A) Using Python Console, run the program with the following arguments:
