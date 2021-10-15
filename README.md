@@ -3,7 +3,11 @@ Calculate the GCL of the input data with bootstrap
 
 # SetUp:
 1) download all the files from this github reposatory to a floder on your computer.
-2) make sure you have python 3.9 installed.
+2) make sure you have .9 installed.
+
+# Requirements:
+1) python 3
+2) Packages for python (if you don't have one of the following, right click inside python on the missing import -> Show Context Actions -> Install Package): numpy, math, random, scipy.
 
 # How To:
 A) Using Python Console, run the program with the following arguments:
