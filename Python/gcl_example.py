@@ -64,7 +64,7 @@ if __name__ == '__main__':
     data_arr = sys.argv[1].split(',')
     num_division = 100
     if len(sys.argv) > 2:
-        num_division = 50 if sys.argv[2] == 'default' else int(sys.argv[2])
+        num_division = 100 if sys.argv[2] == 'default' else int(sys.argv[2])
     boot_strap = 100
     if len(sys.argv) > 3:
         boot_strap = 100 if sys.argv[3] == 'default' else int(sys.argv[3])
