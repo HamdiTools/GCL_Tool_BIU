@@ -15,6 +15,10 @@ import math
 import random
 # alternative for 'pdist2' in matlab (euclidean distance):
 from scipy.spatial.distance import cdist
+# for multithreading:
+import threading
+
+boot_strap_arr = [0] * 100
 
 
 def vn(Aij, Bij, cells):
@@ -72,7 +76,7 @@ def bcdcorr_calculation(data):
     return rn(Aij2, Aij1, cells)
 
 
-def gcl(data, num_divisions=100):
+def gcl(data, num_divisions=100, j=0):
     """
     calculate the GCL of the data (num_divisions) times and return it as a list (vector).
     :param data: Input data such that [num_genes, num_cells] = size(data).
@@ -82,7 +86,8 @@ def gcl(data, num_divisions=100):
     gcl_output = []
     for i in range(num_divisions):
         gcl_output.append(bcdcorr_calculation(data))
-    return np.nanmean(gcl_output)
+    boot_strap_arr[j] = np.nanmean(gcl_output)
+    # return np.nanmean(gcl_output)
 
 
 def bootstrap(data, boot_straps=100, num_divisions=100, choose_percentage=0.8):
@@ -94,8 +99,17 @@ def bootstrap(data, boot_straps=100, num_divisions=100, choose_percentage=0.8):
     :param choose_percentage: The percentage of the cells to calculate in each iteration (default: 0.8).
     :return: an array (vector) of all the gcl's values of the bootstraps.
     """
-    boot_strap_arr = []
+    # boot_strap_arr = [0] * boot_straps
+    threads = []
     for i in range(boot_straps):
         delete_arr = random.sample(range(0, len(data[0])), round(len(data[0]) * (1 - choose_percentage)))
-        boot_strap_arr.append(gcl(np.delete(data, delete_arr, 1), num_divisions))
+        threads.append(
+            threading.Thread(target=gcl, args=(np.delete(data, delete_arr, 1), num_divisions, i)))
+        threads[-1].start()
+        print("thread " + i + "is running")
+        # boot_strap_arr.append(gcl(np.delete(data, delete_arr, 1), num_divisions))
+
+    for thread_num in range(len(threads)):
+        threads[thread_num].join()
+
     return boot_strap_arr
