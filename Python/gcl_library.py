@@ -18,7 +18,7 @@ from scipy.spatial.distance import cdist
 # for multithreading:
 import threading
 
-boot_strap_arr = [0] * 100
+boot_strap_arr = []
 
 
 def vn(Aij, Bij, cells):
@@ -30,7 +30,7 @@ def vn(Aij, Bij, cells):
     :return: new Aij matrix.
     """
     return np.dot((1 / (cells * (cells - 3))),
-                  sum(sum(Aij * Bij)) - np.matmul(np.dot(cells / (cells - 2), np.diag(Aij).T), np.diag(Bij)))
+                  np.sum(np.sum(Aij * Bij)) - np.matmul(np.dot(cells / (cells - 2), np.diag(Aij).T), np.diag(Bij)))
 
 
 def rn(Aij, Bij, cells):
@@ -41,7 +41,7 @@ def rn(Aij, Bij, cells):
     :param cells: number of cells.
     :return: new Aij matrix.
     """
-    return np.divide(vn(Aij, Bij, cells), math.sqrt((vn(Aij, Aij, cells) * vn(Bij, Bij, cells))))
+    return np.divide(vn(Aij, Bij, cells), np.sqrt((vn(Aij, Aij, cells) * vn(Bij, Bij, cells))))
 
 
 def get_matrix(genes_from_data, cells):
@@ -58,8 +58,7 @@ def get_matrix(genes_from_data, cells):
     # operations on the matrices:
     Aij = d - np.matmul(vector_m.T, np.ones((1, cells))) - np.dot(np.ones((cells, 1)), vector_m) + m - vector_m / cells
     np.fill_diagonal(Aij, vector_m - m)
-    Aij = (cells / (cells - 1)) * Aij
-    return Aij
+    return (cells / (cells - 1)) * Aij
 
 
 def bcdcorr_calculation(data):
@@ -79,6 +78,7 @@ def bcdcorr_calculation(data):
 def gcl(data, num_divisions=100, j=0):
     """
     calculate the GCL of the data (num_divisions) times and return it as a list (vector).
+    :param j: thread number.
     :param data: Input data such that [num_genes, num_cells] = size(data).
     :param num_divisions: Number of random gene division to calculate (default: 100)..
     :return: The GCL of the data - a number (nan mean value).
@@ -86,7 +86,8 @@ def gcl(data, num_divisions=100, j=0):
     gcl_output = []
     for i in range(num_divisions):
         gcl_output.append(bcdcorr_calculation(data))
-    boot_strap_arr[j] = np.nanmean(gcl_output)
+    boot_strap_arr.append(np.nanmean(gcl_output))
+    #print('thread ' + str(j) + ' is done!')
     # return np.nanmean(gcl_output)
 
 
@@ -100,16 +101,19 @@ def bootstrap(data, boot_straps=100, num_divisions=100, choose_percentage=0.8):
     :return: an array (vector) of all the gcl's values of the bootstraps.
     """
     # boot_strap_arr = [0] * boot_straps
-    threads = []
-    for i in range(boot_straps):
-        delete_arr = random.sample(range(0, len(data[0])), round(len(data[0]) * (1 - choose_percentage)))
-        threads.append(
-            threading.Thread(target=gcl, args=(np.delete(data, delete_arr, 1), num_divisions, i)))
-        threads[-1].start()
-        print("thread " + i + "is running")
-        # boot_strap_arr.append(gcl(np.delete(data, delete_arr, 1), num_divisions))
+    i = 0
+    while i < max(boot_straps, 10):
+        thread_group = 5
+        threads = []
 
-    for thread_num in range(len(threads)):
-        threads[thread_num].join()
-
+        while thread_group > 0 and i < max(boot_straps, 10):
+            delete_arr = random.sample(range(0, len(data[0])), round(len(data[0]) * (1 - choose_percentage)))
+            t = threading.Thread(target=gcl, args=(np.delete(data, delete_arr, 1), num_divisions, i))
+            threads.append(t)
+            t.start()
+            #print("thread " + str(i) + " is running")
+            i += 1
+            thread_group -= 1
+        for thread in threads:
+            thread.join()
     return boot_strap_arr

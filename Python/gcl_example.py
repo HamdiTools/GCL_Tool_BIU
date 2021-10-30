@@ -6,8 +6,13 @@ import numpy as np
 # check if input file/s exists:
 from pathlib import Path
 from os import path
+import threading
+from scipy.spatial.distance import cdist
+import math
+import random
 # gcl library import:
 from matplotlib import pyplot as plt
+import time
 
 
 def main_gcl_start(files_arr, boot_straps=100, num_divisions=100, boot_strap_percentage=0.5, task='bootstrap'):
@@ -59,19 +64,22 @@ if __name__ == '__main__':
     *       4) bootstrap_percentage [optional] - Percentage of cells to choose for bootstrapping.
     *       5) task_option [optional] - either 'bootsrtap' or 'regular_calc' for the requested task.
     '''
-    if len(sys.argv) == 1:
-        raise Exception("not enough arguments")
-    data_arr = sys.argv[1].split(',')
-    num_division = 100
-    if len(sys.argv) > 2:
-        num_division = 100 if sys.argv[2] == 'default' else int(sys.argv[2])
-    boot_strap = 100
-    if len(sys.argv) > 3:
-        boot_strap = 100 if sys.argv[3] == 'default' else int(sys.argv[3])
-    bootstrap_percentage = 0.8
-    if len(sys.argv) > 4:
-        bootstrap_percentage = 0.8 if sys.argv[4] == 'default' else float(sys.argv[4])
-    task_option = 'bootstrap'
-    if len(sys.argv) > 5:
-        task_option = 'bootstrap' if sys.argv[5] == 'default' else sys.argv[5]
-    main_gcl_start(data_arr, boot_strap, num_division, bootstrap_percentage, task_option)
+    for k in range(7):
+        t = time.time()
+        if len(sys.argv) == 1:
+            raise Exception("not enough arguments")
+        data_arr = sys.argv[1].split(',')
+        num_division = 100
+        if len(sys.argv) > 2:
+            num_division = 100 if sys.argv[2] == 'default' else int(sys.argv[2])
+        boot_strap = 100
+        if len(sys.argv) > 3:
+            boot_strap = 100 if sys.argv[3] == 'default' else int(sys.argv[3])
+        bootstrap_percentage = 0.8
+        if len(sys.argv) > 4:
+            bootstrap_percentage = 0.8 if sys.argv[4] == 'default' else float(sys.argv[4])
+        task_option = 'bootstrap'
+        if len(sys.argv) > 5:
+            task_option = 'bootstrap' if sys.argv[5] == 'default' else sys.argv[5]
+        main_gcl_start(data_arr, boot_strap, num_division, bootstrap_percentage, task_option)
+        print('Time for all proccess: ' + str(time.time() - t)+'seconds')
