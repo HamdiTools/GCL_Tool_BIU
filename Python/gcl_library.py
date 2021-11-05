@@ -75,10 +75,9 @@ def bcdcorr_calculation(data):
     return rn(Aij2, Aij1, cells)
 
 
-def gcl(data, num_divisions=100, j=0):
+def gcl(data, num_divisions):
     """
     calculate the GCL of the data (num_divisions) times and return it as a list (vector).
-    :param j: thread number.
     :param data: Input data such that [num_genes, num_cells] = size(data).
     :param num_divisions: Number of random gene division to calculate (default: 100)..
     :return: The GCL of the data - a number (nan mean value).
@@ -87,33 +86,29 @@ def gcl(data, num_divisions=100, j=0):
     for i in range(num_divisions):
         gcl_output.append(bcdcorr_calculation(data))
     boot_strap_arr.append(np.nanmean(gcl_output))
-    #print('thread ' + str(j) + ' is done!')
-    # return np.nanmean(gcl_output)
 
 
-def bootstrap(data, boot_straps=100, num_divisions=100, choose_percentage=0.8):
+def bootstrap(data, boot_straps=70, choose_percentage=0.8, num_divisions=10):
     """
     bootstrapping the data - instead of repeating values, unique choose_percentage values from the data.
     :param data: Input data.
-    :param boot_straps: Number of iterations to calculate (default: 100).
-    :param num_divisions: Number of divisions for the gcl calculation (default: 100).
+    :param boot_straps: Number of iterations to calculate (default: 70).
     :param choose_percentage: The percentage of the cells to calculate in each iteration (default: 0.8).
+    :param num_divisions: Number of divisions for the gcl calculation (default: 10).
     :return: an array (vector) of all the gcl's values of the bootstraps.
     """
-    # boot_strap_arr = [0] * boot_straps
+    boot_strap_arr.clear()
     i = 0
     while i < max(boot_straps, 10):
-        thread_group = 5
         threads = []
-
+        thread_group = 4
         while thread_group > 0 and i < max(boot_straps, 10):
             delete_arr = random.sample(range(0, len(data[0])), round(len(data[0]) * (1 - choose_percentage)))
-            t = threading.Thread(target=gcl, args=(np.delete(data, delete_arr, 1), num_divisions, i))
+            t = threading.Thread(target=gcl, args=(np.delete(data, delete_arr, 1), num_divisions))
             threads.append(t)
             t.start()
-            #print("thread " + str(i) + " is running")
             i += 1
             thread_group -= 1
         for thread in threads:
             thread.join()
-    return boot_strap_arr
+    return boot_strap_arr.copy()
