@@ -41,7 +41,7 @@ def main_gcl_start(files_arr, boot_straps=70, num_divisions=10, boot_strap_perce
     # plotting the histogram:
     if task == 'bootstrap':
         for result in range(len(result_arr)):
-            plt.hist(result_arr[result], 8, density=False, edgecolor='black', label=file_names[result], alpha=.8)
+            plt.hist(result_arr[result], 10, density=False, edgecolor='black', label=file_names[result], alpha=.8)
         plot_title = 'GCL - ' + (
             'BootStrap ' if task == 'bootstrap' else 'Regular Calculation ') + 'Histogram with: ' + str(
             boot_straps) + ' Boot Straps' + ', ' + str(boot_strap_percentage * 100) + '%'
