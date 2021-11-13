@@ -13,7 +13,7 @@ import random
 # gcl library import:
 from matplotlib import pyplot as plt
 
-import time
+
 def main_gcl_start(files_arr, boot_straps=70, num_divisions=10, boot_strap_percentage=0.8, task='bootstrap'):
     '''
     The main gcl start function to generate and present the histograms.
@@ -40,7 +40,7 @@ def main_gcl_start(files_arr, boot_straps=70, num_divisions=10, boot_strap_perce
             raise NameError('Invalid Task!')
     # plotting the histogram/s:
     if task == 'bootstrap':
-        bin_width = 0.02
+        bin_width = 0.015
         overall_min, overall_max = 0.2, 0.550000000001
         for result in range(len(result_arr)):
             plt.hist(result_arr[result], density=False, edgecolor='black', label=file_names[result], alpha=.8,
@@ -49,13 +49,12 @@ def main_gcl_start(files_arr, boot_straps=70, num_divisions=10, boot_strap_perce
             'BootStrap ' if task == 'bootstrap' else 'Regular Calculation ') + 'Histogram with: ' + str(
             boot_straps) + ' Boot Straps' + ', ' + str(boot_strap_percentage * 100) + '%'
         # plt.title(plot_title)
-        plt.xticks(np.arange(overall_min, overall_max, 0.025*2), fontsize=14)
+        plt.xticks(np.arange(overall_min, overall_max, 0.025 * 2), fontsize=14)
         plt.yticks(fontsize=14)
-    plt.xlabel('GCL' , fontsize=16)
+    plt.xlabel('GCL', fontsize=16)
     plt.rc('legend', fontsize='x-large')
-
-    plt.ylabel('Iterations',fontsize=16)
-    plt.legend(loc='upper left')
+    plt.ylabel('Iterations', fontsize=16)
+    plt.legend(loc='upper right')
     plt.show()
 
 
@@ -70,8 +69,6 @@ if __name__ == '__main__':
     *       5) num_division [optional] - Number of random gene division iterations for calculation.
     '''
 
-
-    t = time.time()
     if len(sys.argv) == 1:
         raise Exception("not enough arguments")
     data_arr = sys.argv[1].split(',')
@@ -93,4 +90,3 @@ if __name__ == '__main__':
         num_division = 10 if sys.argv[5] == 'default' else int(sys.argv[5])
 
     main_gcl_start(data_arr, boot_strap, num_division, bootstrap_percentage, task_option)
-    print(str(time.time()-t))

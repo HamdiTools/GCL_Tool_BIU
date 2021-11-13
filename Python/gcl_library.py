@@ -30,7 +30,8 @@ def vn(Aij, Bij, cells):
     :return: new Aij matrix.
     """
     return np.dot((1 / (cells * (cells - 3))),
-                  np.sum(np.sum(Aij * Bij)) - np.matmul(np.dot(cells / (cells - 2), np.diag(Aij).T), np.diag(Bij)))
+                  np.sum(np.sum(Aij * Bij)) - np.matmul(np.dot(cells / (cells - 2), np.diag(Aij).T),
+                                                        np.diag(Bij)))
 
 
 def rn(Aij, Bij, cells):
@@ -56,7 +57,7 @@ def get_matrix(genes_from_data, cells):
     d = cdist(genes_from_data, genes_from_data, metric='euclidean')
     m, vector_m = np.mean(d), np.mean(d, axis=0).reshape(1, cells)
     # operations on the matrices:
-    Aij = d - np.matmul(vector_m.T, np.ones((1, cells))) - np.dot(np.ones((cells, 1)), vector_m) + m - vector_m / cells
+    Aij = d - np.dot(vector_m.T, np.ones((1, cells))) - np.dot(np.ones((cells, 1)), vector_m) + m - vector_m / cells
     np.fill_diagonal(Aij, vector_m - m)
     return (cells / (cells - 1)) * Aij
 
@@ -70,7 +71,7 @@ def bcdcorr_calculation(data):
     num_genes, cells = len(data), len(data[0])
     random_genes = np.random.permutation(num_genes)
     first_half, second_half = random_genes[:math.floor(num_genes / 2)], random_genes[math.floor(num_genes / 2):]
-    Aij1, Aij2 = get_matrix(np.transpose(data[first_half]), cells), get_matrix(np.transpose(data[second_half]), cells)
+    Aij1, Aij2 = get_matrix(data[first_half].T, cells), get_matrix(data[second_half].T, cells)
     # Calculating bcdcorr:
     return rn(Aij2, Aij1, cells)
 
