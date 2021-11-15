@@ -49,11 +49,11 @@ def main_gcl_start(files_arr, boot_straps=70, num_divisions=10, boot_strap_perce
             'BootStrap ' if task == 'bootstrap' else 'Regular Calculation ') + 'Histogram with: ' + str(
             boot_straps) + ' Boot Straps' + ', ' + str(boot_strap_percentage * 100) + '%'
         # plt.title(plot_title)
-        plt.xticks(np.arange(overall_min, overall_max, 0.025 * 2), fontsize=14)
-        plt.yticks(fontsize=14)
-    plt.xlabel('GCL', fontsize=16)
+        plt.xticks(np.arange(overall_min, overall_max, 0.025 * 4), fontsize=20)
+        plt.yticks(np.arange(0, 50, 10),fontsize=20)
+    plt.xlabel('GCL', fontsize=24)
+    plt.ylabel('Iterations', fontsize=24)
     plt.rc('legend', fontsize='x-large')
-    plt.ylabel('Iterations', fontsize=16)
     plt.legend(loc='upper right')
     plt.show()
 
