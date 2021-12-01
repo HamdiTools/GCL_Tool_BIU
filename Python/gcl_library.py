@@ -1,4 +1,4 @@
-'''
+"""
 Calculate the GCL of the input data with bootstrap
 Guy Amit, guy1.amit@gmail.com, Orr Levy, Dana Vaknin, Tom Snir, Sol
 Efroni, Peter Castaldi, Yang-Yu Liu, Haim Cohen, Amir Bashan.
@@ -8,7 +8,9 @@ high dimension. Journal of Multivariate Analysis, 117, 193-213.
 data - Input data such that [num_genes, num_cells] = size(data)
 num_division - Number of random gene division for calculation.
 gcl_output - The GCL of the data
-'''
+--
+Code written by Omer Hamdi - omerhamdilf2@gmail.com.
+"""
 # Imports:
 import numpy as np
 import math

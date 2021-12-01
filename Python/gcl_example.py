@@ -1,3 +1,8 @@
+"""
+GCL - Global Coordination Level Python Tool.
+November 2021.
+Code written by Omer Hamdi - omerhamdilf2@gmail.com.
+"""
 # Imports:
 import gcl_library as gcl_lib
 
@@ -39,6 +44,7 @@ def main_gcl_start(files_arr, boot_straps=70, num_divisions=10, boot_strap_perce
         else:
             raise NameError('Invalid Task!')
     # plotting the histogram/s:
+    plt.figure(figsize=(8, 8))
     if task == 'bootstrap':
         bin_width = 0.015
         overall_min, overall_max = 0.2, 0.550000000001
@@ -49,11 +55,11 @@ def main_gcl_start(files_arr, boot_straps=70, num_divisions=10, boot_strap_perce
             'BootStrap ' if task == 'bootstrap' else 'Regular Calculation ') + 'Histogram with: ' + str(
             boot_straps) + ' Boot Straps' + ', ' + str(boot_strap_percentage * 100) + '%'
         # plt.title(plot_title)
-        plt.xticks(np.arange(overall_min, overall_max, 0.025 * 4), fontsize=20)
-        plt.yticks(np.arange(0, 50, 10),fontsize=20)
-    plt.xlabel('GCL', fontsize=24)
-    plt.ylabel('Iterations', fontsize=24)
-    plt.rc('legend', fontsize='x-large')
+        plt.xticks(np.arange(overall_min, overall_max, 0.025 * 4), fontsize=28)
+        plt.yticks(np.arange(0, 50, 10), fontsize=28)
+    plt.xlabel('GCL', fontsize=32)
+    plt.ylabel('Iterations', fontsize=32)
+    plt.rc('legend', fontsize=26)
     plt.legend(loc='upper right')
     plt.show()
 
