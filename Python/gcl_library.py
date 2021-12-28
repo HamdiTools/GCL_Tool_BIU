@@ -112,6 +112,7 @@ def bootstrap(data, boot_straps=70, choose_percentage=0.8, num_divisions=10):
             t.start()
             i += 1
             thread_group -= 1
+        # wait for all threads to finish:
         for thread in threads:
             thread.join()
     return boot_strap_arr.copy()

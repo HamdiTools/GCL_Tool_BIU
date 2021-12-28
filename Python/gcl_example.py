@@ -6,12 +6,14 @@ Code written by Omer Hamdi - omerhamdilf2@gmail.com.
 # Imports:
 import gcl_library as gcl_lib
 
-import sys
-import numpy as np
 # check if input file/s exists:
+import sys
 from pathlib import Path
 from os import path
+# for threading:
 import threading
+# math tools:
+import numpy as np
 from scipy.spatial.distance import cdist
 import math
 import random
@@ -20,15 +22,15 @@ from matplotlib import pyplot as plt
 
 
 def main_gcl_start(files_arr, boot_straps=70, num_divisions=10, boot_strap_percentage=0.8, task='bootstrap'):
-    '''
+    """
     The main gcl start function to generate and present the histograms.
-    :param files_arr: Array of .CSV files.
-    :param boot_straps: Number of bootstraps for calculation.
-    :param num_divisions: Number of random gene division for calculation.
-    :param boot_strap_percentage: Percentage of cells to choose for bootstrapping.
-    :param task: String, either 'bootstrap' or 'regular_calc' for the requested task.
-    :return: none.
-    '''
+    param files_arr: Array of .CSV files.
+    param boot_straps: Number of bootstraps for calculation.
+    param num_divisions: Number of random gene division for calculation.
+    param boot_strap_percentage: Percentage of cells to choose for bootstrapping.
+    param task: String, either 'bootstrap' or 'regular_calc' for the requested task.
+    return: none.
+    """
     for file in files_arr:
         if not path.exists(file):
             raise NameError('Invalid File/s!')
@@ -44,19 +46,17 @@ def main_gcl_start(files_arr, boot_straps=70, num_divisions=10, boot_strap_perce
         else:
             raise NameError('Invalid Task!')
     # plotting the histogram/s:
-    plt.figure(figsize=(8, 8))
+    plt.figure(figsize=(10, 10))
     if task == 'bootstrap':
-        bin_width = 0.015
-        overall_min, overall_max = 0.2, 0.550000000001
         for result in range(len(result_arr)):
-            plt.hist(result_arr[result], density=False, edgecolor='black', label=file_names[result], alpha=.8,
-                     bins=np.arange(min(result_arr[result]), max(result_arr[result]) + bin_width, bin_width))
-        plot_title = 'GCL - ' + (
-            'BootStrap ' if task == 'bootstrap' else 'Regular Calculation ') + 'Histogram with: ' + str(
+            plt.hist(result_arr[result], 8, density=False, edgecolor='black', label=file_names[result], alpha=.8)
+        plot_title = 'GCL ' + (
+            'BootStrap ' if task == 'bootstrap' else 'Regular Calculation ') + 'Hist. with: ' + str(
             boot_straps) + ' Boot Straps' + ', ' + str(boot_strap_percentage * 100) + '%'
-        # plt.title(plot_title)
-        plt.xticks(np.arange(overall_min, overall_max, 0.025 * 4), fontsize=28)
-        plt.yticks(np.arange(0, 50, 10), fontsize=28)
+        plt.title(plot_title, fontsize=26)
+    # plot settings:
+    plt.xticks(fontsize=20)
+    plt.yticks(fontsize=20)
     plt.xlabel('GCL', fontsize=32)
     plt.ylabel('Iterations', fontsize=32)
     plt.rc('legend', fontsize=26)
