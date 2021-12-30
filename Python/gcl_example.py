@@ -21,14 +21,14 @@ import random
 from matplotlib import pyplot as plt
 
 
-def main_gcl_start(files_arr, boot_straps=70, num_divisions=10, boot_strap_percentage=0.8, task='bootstrap'):
+def main_gcl_start(files_arr, jack_knifes=70, num_divisions=10, jack_knife_percentage=0.8, task='jackknife'):
     """
     The main gcl start function to generate and present the histograms.
     param files_arr: Array of .CSV files.
-    param boot_straps: Number of bootstraps for calculation.
+    param jack_knifes: Number of jackknives for calculation.
     param num_divisions: Number of random gene division for calculation.
-    param boot_strap_percentage: Percentage of cells to choose for bootstrapping.
-    param task: String, either 'bootstrap' or 'regular_calc' for the requested task.
+    param jack_knife_percentage: Percentage of cells to choose for jackknife realization.
+    param task: String, either 'jackknife' or 'regular_calc' for the requested task.
     return: none.
     """
     for file in files_arr:
@@ -38,8 +38,8 @@ def main_gcl_start(files_arr, boot_straps=70, num_divisions=10, boot_strap_perce
     for file in files_arr:
         csv_mat = np.genfromtxt(file, delimiter=',')
         file_names.append(Path(file).stem)
-        if task == 'bootstrap':
-            result_arr.append(gcl_lib.bootstrap(csv_mat, boot_straps, boot_strap_percentage, num_divisions))
+        if task == 'jackknife':
+            result_arr.append(gcl_lib.jackknife(csv_mat, jack_knifes, jack_knife_percentage, num_divisions))
         elif task == 'regular_calc':
             result_arr.append(gcl_lib.gcl(csv_mat, num_divisions))
             print('GCL value of ' + file_names[-1] + ' is: ' + str(result_arr[-1]))
@@ -47,12 +47,12 @@ def main_gcl_start(files_arr, boot_straps=70, num_divisions=10, boot_strap_perce
             raise NameError('Invalid Task!')
     # plotting the histogram/s:
     plt.figure(figsize=(10, 10))
-    if task == 'bootstrap':
+    if task == 'jackknife':
         for result in range(len(result_arr)):
             plt.hist(result_arr[result], 8, density=False, edgecolor='black', label=file_names[result], alpha=.8)
         plot_title = 'GCL ' + (
-            'BootStrap ' if task == 'bootstrap' else 'Regular Calculation ') + 'Hist. with: ' + str(
-            boot_straps) + ' Boot Straps' + ', ' + str(boot_strap_percentage * 100) + '%'
+            'jackknife ' if task == 'jackknife' else 'Regular Calculation ') + 'Hist. with: ' + str(
+            jack_knifes) + ' realizations' + ', ' + str(jack_knife_percentage * 100) + '%'
         plt.title(plot_title, fontsize=26)
     # plot settings:
     plt.xticks(fontsize=20)
@@ -69,9 +69,9 @@ if __name__ == '__main__':
     Run main_gcl_start with received arguments or default values.
     * Input: (as arguments, in the following order. for default write: 'default')
     *       1) data_arr [mandatory] - files array data with all the files in the current folder to make the GCL on.
-    *       2) bootstraps [optional] - Number of boot straps iterations for calculation.
-    *       3) bootstrap_percentage [optional] - Percentage of cells to choose for bootstrapping.
-    *       4) task_option [optional] - either 'bootstrap' or 'regular_calc' for the requested task.
+    *       2) jackknife [optional] - Number of jackknives iterations for calculation.
+    *       3) jackknife_percentage [optional] - Percentage of cells to choose for jackknife realization.
+    *       4) task_option [optional] - either 'jackknife' or 'regular_calc' for the requested task.
     *       5) num_division [optional] - Number of random gene division iterations for calculation.
     '''
 
@@ -79,20 +79,20 @@ if __name__ == '__main__':
         raise Exception("not enough arguments")
     data_arr = sys.argv[1].split(',')
 
-    boot_strap = 70
+    jack_knife = 70
     if len(sys.argv) > 2:
-        boot_strap = 70 if sys.argv[2] == 'default' else int(sys.argv[2])
+        jack_knife = 70 if sys.argv[2] == 'default' else int(sys.argv[2])
 
-    bootstrap_percentage = 0.8
+    jackknife_percentage = 0.8
     if len(sys.argv) > 3:
-        bootstrap_percentage = 0.8 if sys.argv[3] == 'default' else float(sys.argv[3])
+        jackknife_percentage = 0.8 if sys.argv[3] == 'default' else float(sys.argv[3])
 
-    task_option = 'bootstrap'
+    task_option = 'jackknife'
     if len(sys.argv) > 4:
-        task_option = 'bootstrap' if sys.argv[4] == 'default' else sys.argv[4]
+        task_option = 'jackknife' if sys.argv[4] == 'default' else sys.argv[4]
 
     num_division = 10
     if len(sys.argv) > 5:
         num_division = 10 if sys.argv[5] == 'default' else int(sys.argv[5])
 
-    main_gcl_start(data_arr, boot_strap, num_division, bootstrap_percentage, task_option)
+    main_gcl_start(data_arr, jack_knife, num_division, jackknife_percentage, task_option)

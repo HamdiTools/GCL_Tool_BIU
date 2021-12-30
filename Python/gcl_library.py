@@ -1,5 +1,5 @@
 """
-Calculate the GCL of the input data with bootstrap
+Calculate the GCL of the input data with jackknife
 Guy Amit, guy1.amit@gmail.com, Orr Levy, Dana Vaknin, Tom Snir, Sol
 Efroni, Peter Castaldi, Yang-Yu Liu, Haim Cohen, Amir Bashan.
 Based on Bias Corrected Distance Correlation Szekely, G. J., & Rizzo,
@@ -20,7 +20,7 @@ from scipy.spatial.distance import cdist
 # for multithreading:
 import threading
 
-boot_strap_arr = []
+jack_knife_arr = []
 
 
 def vn(Aij, Bij, cells):
@@ -88,24 +88,24 @@ def gcl(data, num_divisions):
     gcl_output = []
     for i in range(num_divisions):
         gcl_output.append(bcdcorr_calculation(data))
-    boot_strap_arr.append(np.nanmean(gcl_output))
+    jack_knife_arr.append(np.nanmean(gcl_output))
 
 
-def bootstrap(data, boot_straps=70, choose_percentage=0.8, num_divisions=10):
+def jackknife(data, jack_knifes=70, choose_percentage=0.8, num_divisions=10):
     """
-    bootstrapping the data - instead of repeating values, unique choose_percentage values from the data.
+    jackknife realization the data - instead of repeating values, unique choose_percentage values from the data.
     :param data: Input data.
-    :param boot_straps: Number of iterations to calculate (default: 70).
+    :param jack_knifes: Number of iterations to calculate (default: 70).
     :param choose_percentage: The percentage of the cells to calculate in each iteration (default: 0.8).
     :param num_divisions: Number of divisions for the gcl calculation (default: 10).
-    :return: an array (vector) of all the gcl's values of the bootstraps.
+    :return: an array (vector) of all the gcl's values of the jackknives.
     """
-    boot_strap_arr.clear()
+    jack_knife_arr.clear()
     i = 0
-    while i < max(boot_straps, 10):
+    while i < max(jack_knifes, 10):
         threads = []
         thread_group = 4
-        while thread_group > 0 and i < max(boot_straps, 10):
+        while thread_group > 0 and i < max(jack_knifes, 10):
             delete_arr = random.sample(range(0, len(data[0])), round(len(data[0]) * (1 - choose_percentage)))
             t = threading.Thread(target=gcl, args=(np.delete(data, delete_arr, 1), num_divisions))
             threads.append(t)
@@ -115,4 +115,4 @@ def bootstrap(data, boot_straps=70, choose_percentage=0.8, num_divisions=10):
         # wait for all threads to finish:
         for thread in threads:
             thread.join()
-    return boot_strap_arr.copy()
+    return jack_knife_arr.copy()
