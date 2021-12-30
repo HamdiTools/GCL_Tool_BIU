@@ -30,8 +30,8 @@ A) Run the program with the following arguments (use space as delimiter):
 
 Example set of arguments:
 
-* old.csv,young.csv 70 0.8 jackknife 10
-* old.csv,young.csv 70 0.4 jackknife 10
+* old.csv,young.csv 100 0.8 jackknife 10
+* old.csv,young.csv 100 0.4 jackknife 10
   <br />
   This two examples will yield the following:
   <br />
