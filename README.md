@@ -37,4 +37,4 @@ Example set of arguments:
   <br />
 ![img_2.png](img_2.png)
 ![img_3.png](img_3.png)
-* for default values - enter 'default' instead of the requested value.<br />An input for example: old.csv,young.csv default 0.8 jackknife 10
+* for default values - enter 'default' instead of the requested value.<br />An input for example: old.csv,young.csv default 0.8 jackknife 10 
